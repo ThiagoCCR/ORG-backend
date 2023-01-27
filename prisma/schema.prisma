@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Finance {
+  id        Int       @id(map: "Finance_pk") @default(autoincrement())
+  date      DateTime  @db.Date
+  userId    Int
+  type      String
+  class     String?
+  createdAt DateTime  @db.Date
+  updatedAt DateTime? @db.Date
+  users     users     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "public.Finance_fk0")
+}
+
+model Habits {
+  id        Int       @id(map: "Habits_pk") @default(autoincrement())
+  name      String    @db.VarChar(255)
+  status    Boolean
+  userId    Int
+  day       String    @db.VarChar(255)
+  createdAt DateTime  @db.Date
+  updatedAt DateTime? @db.Date
+  users     users     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Habits_fk0")
+}
+
+model Humor {
+  id        Int       @id(map: "Humor_pk") @default(autoincrement())
+  userId    Int       @default(autoincrement())
+  day       DateTime  @db.Date
+  humor     String
+  createdAt DateTime  @db.Date
+  updatedAt DateTime? @db.Date
+  users     users     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Humor_fk0")
+}
+
+model Session {
+  id        Int       @id(map: "sessions_pk") @default(autoincrement())
+  userId    Int       @default(autoincrement())
+  token     String    @db.VarChar(255)
+  createdAt DateTime  @db.Date
+  updatedAt DateTime? @db.Date
+  users     users     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Session_fk0")
+}
+
+model users {
+  id        Int       @id(map: "users_pk") @default(autoincrement())
+  name      String    @db.VarChar(50)
+  email     String    @unique
+  password  String    @db.VarChar(20)
+  createdAt DateTime  @default(dbgenerated("'2023-01-27'::date")) @db.Date
+  updatedAt DateTime? @db.Date
+  Finance   Finance[]
+  Habits    Habits[]
+  Humor     Humor[]
+  Session   Session[]
+}
