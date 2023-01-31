@@ -1,3 +1,4 @@
 export * from "./users-repository";
-export * from "./session-repository";
+export * from "./sessions-repository";
+export * from "./habits-repository";
 

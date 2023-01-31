@@ -7,7 +7,7 @@ import { connectDb, disconnectDB } from "@/config/db";
 
 import { handleApplicationErrors } from "@/middlewares";
 
-import { usersRouter, authenticationRouter } from "@/routers";
+import { usersRouter, authenticationRouter, habitsRouter } from "@/routers";
 
 const app = express();
 app
@@ -16,6 +16,7 @@ app
   .get("/health", (_req, res) => res.send("OK!"))
   .use("/users", usersRouter)
   .use("/auth", authenticationRouter)
+  .use("/habits", habitsRouter)
   .use(handleApplicationErrors);
 
 export function init(): Promise<Express> {

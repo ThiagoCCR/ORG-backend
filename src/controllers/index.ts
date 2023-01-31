@@ -1,2 +1,3 @@
 export * from "./users-controller";
-export * from "./authorization-controller";
+export * from "./authentication-controller";
+export * from "./habits-controller";

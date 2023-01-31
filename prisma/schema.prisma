@@ -18,17 +18,6 @@ model Finance {
   User      User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Finance_fk0")
 }
 
-model Habits {
-  id        Int       @id(map: "Habits_pk") @default(autoincrement())
-  name      String    @db.VarChar(255)
-  status    Boolean
-  userId    Int
-  day       String    @db.VarChar(255)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime?
-  User      User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Habits_fk0")
-}
-
 model Humor {
   id        Int       @id(map: "Humor_pk") @default(autoincrement())
   userId    Int       @default(autoincrement())
@@ -56,7 +45,39 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime?
   Finance   Finance[]
-  Habits    Habits[]
+  Habit     Habit[]
   Humor     Humor[]
   Session   Session[]
+}
+
+model Habit {
+  id        Int        @id(map: "Habit_pk") @default(autoincrement())
+  name      String     @db.VarChar(255)
+  userId    Int
+  createdAt DateTime   @default(now())
+  updatedAt DateTime?
+  User      User       @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Habit_fk0")
+  HabitDay  HabitDay[]
+  HabitLog  HabitLog[]
+}
+
+model HabitDay {
+  id        Int        @id(map: "HabitDay_pk") @default(autoincrement())
+  habitId   Int
+  day       Int
+  createdAt DateTime   @default(now())
+  updatedAt DateTime?
+  Habit     Habit      @relation(fields: [habitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "HabitDay_fk0")
+  HabitLog  HabitLog[]
+}
+
+model HabitLog {
+  id        Int       @id(map: "HabitLog_pk") @default(autoincrement())
+  habitId   Int
+  dayId     Int
+  done      Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  HabitDay  HabitDay  @relation(fields: [dayId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "HabitLog_fk1")
+  Habit     Habit     @relation(fields: [habitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "HabitLog_fk0")
 }
