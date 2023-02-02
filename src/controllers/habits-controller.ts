@@ -10,9 +10,9 @@ export async function postHabit(req: AuthenticatedRequest, res: Response) {
   try {
     const result = await habitsService.createHabit({ name, days }, userId);
 
-    return res.status(httpStatus.OK).send(result);
+    return res.status(httpStatus.CREATED).send(result);
   } catch (error) {
-    return res.status(httpStatus.UNAUTHORIZED).send(error.message);
+    return res.status(httpStatus.BAD_REQUEST).send(error.message);
   }
 }
 
@@ -23,7 +23,7 @@ export async function getAllHabits(req: AuthenticatedRequest, res: Response) {
 
     return res.status(httpStatus.OK).send(result);
   } catch (error) {
-    return res.status(httpStatus.UNAUTHORIZED).send(error.message);
+    return res.status(httpStatus.BAD_REQUEST).send(error.message);
   }
 }
 
@@ -34,7 +34,29 @@ export async function getTodayHabits(req: AuthenticatedRequest, res: Response) {
 
     return res.status(httpStatus.OK).send(result);
   } catch (error) {
-    return res.status(httpStatus.UNAUTHORIZED).send(error.message);
+    return res.status(httpStatus.BAD_REQUEST).send(error.message);
   }
 }
 
+export async function checkHabit(req: AuthenticatedRequest, res: Response) {
+  const { habitId, dayId } = req.body;
+  try {
+    const result = await habitsService.checkHabit(habitId, dayId);
+
+    return res.status(httpStatus.OK).send(result);
+  } catch (error) {
+    console.log(error);
+    return res.status(httpStatus.FORBIDDEN).send(error.message);
+  }
+}
+
+export async function uncheckHabit(req: AuthenticatedRequest, res: Response) {
+  const { habitId, dayId } = req.body;
+  try {
+    const result = await habitsService.uncheckHabit(habitId, dayId);
+
+    return res.status(httpStatus.OK).send(result);
+  } catch (error) {
+    return res.status(httpStatus.FORBIDDEN).send(error.message);
+  }
+}

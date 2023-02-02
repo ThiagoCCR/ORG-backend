@@ -48,10 +48,42 @@ function filterTodayNumber(today: string) {
   if (today === "Sunday") return 7;
 }
 
+async function checkHabit(habitId: number, dayId: number) {
+  const now = dayjs().format("DD-MM-YY");
+  const habitLogExists = await HabitsRepository.findHabitLog(habitId, now);
+
+  if (habitLogExists && habitLogExists.done === false) {
+    const checkedHabit = await HabitsRepository.checkOrUncheckUserHabit(habitLogExists.id, true);
+    if (!checkedHabit) throw badRequestError();
+    return checkedHabit;
+  }
+
+  const newHabitLog = await HabitsRepository.createHabitLog(habitId, dayId, now, true);
+  if (!newHabitLog) throw badRequestError();
+  return newHabitLog;
+}
+
+async function uncheckHabit(habitId: number, dayId: number) {
+  const now = dayjs().format("DD-MM-YY");
+  const habitLogExists = await HabitsRepository.findHabitLog(habitId, now);
+
+  if (habitLogExists && habitLogExists.done === true) {
+    const checkedHabit = await HabitsRepository.checkOrUncheckUserHabit(habitLogExists.id, true);
+    if (!checkedHabit) throw badRequestError();
+    return checkedHabit;
+  }
+
+  const newHabitLog = await HabitsRepository.createHabitLog(habitId, dayId, now, false);
+  if (!newHabitLog) throw badRequestError();
+  return newHabitLog;
+}
+
 const habitsService = {
   createHabit,
   findUserHabits,
   findUserTodayHabits,
+  checkHabit,
+  uncheckHabit,
 };
 
 export default habitsService;

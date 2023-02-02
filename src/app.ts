@@ -17,6 +17,7 @@ app
   .use("/users", usersRouter)
   .use("/auth", authenticationRouter)
   .use("/habits", habitsRouter)
+  .use("/finances", habitsRouter)
   .use(handleApplicationErrors);
 
 export function init(): Promise<Express> {

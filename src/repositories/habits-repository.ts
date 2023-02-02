@@ -47,11 +47,45 @@ async function findUserTodayHabits(userId: number, today: number) {
   });
 }
 
+async function createHabitLog(habitId: number, dayId: number, date: string, done: boolean) {
+  return prisma.habitLog.create({
+    data: {
+      habitId,
+      dayId,
+      done,
+      date,
+    },
+  });
+}
+
+async function findHabitLog(habitId: number, today: string) {
+  return prisma.habitLog.findFirst({
+    where: {
+      habitId,
+      date: today,
+    },
+  });
+}
+
+async function checkOrUncheckUserHabit(id: number, done: boolean) {
+  return prisma.habitLog.update({
+    where: {
+      id,
+    },
+    data: {
+      done,
+    },
+  });
+}
+
 const sessionRepository = {
   createHabit,
   createHabitDay,
   findAllUserHabits,
   findUserTodayHabits,
+  findHabitLog,
+  checkOrUncheckUserHabit,
+  createHabitLog,
 };
 
 export default sessionRepository;

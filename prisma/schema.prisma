@@ -15,6 +15,7 @@ model Finance {
   class     String?
   createdAt DateTime  @default(now())
   updatedAt DateTime?
+  name      String
   User      User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Finance_fk0")
 }
 
@@ -78,6 +79,7 @@ model HabitLog {
   done      Boolean   @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime?
+  date      String
   HabitDay  HabitDay  @relation(fields: [dayId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "HabitLog_fk1")
   Habit     Habit     @relation(fields: [habitId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "HabitLog_fk0")
 }
