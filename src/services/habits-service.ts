@@ -24,6 +24,9 @@ async function findUserTodayHabits(userId: number) {
   const todayNumber = filterTodayNumber(today);
   const Habits = await HabitsRepository.findUserTodayHabits(userId, todayNumber);
   if (!Habits) throw notFoundError();
+  Habits.filter((habit) => {
+    if (habit.HabitDay.length > 0) return habit;
+  });
   return Habits;
 }
 
